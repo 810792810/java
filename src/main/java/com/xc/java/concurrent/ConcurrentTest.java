@@ -1,7 +1,8 @@
 package com.xc.java.concurrent;
 
 /**
- * @author xc
+ * @Author: xc
+ * @Date: 2020/6/5
  */
 public class ConcurrentTest {
 }
