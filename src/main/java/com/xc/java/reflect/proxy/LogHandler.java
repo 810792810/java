@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
  * 工作日志处理代理类
  */
 public class LogHandler<T>  implements InvocationHandler {
-
+    //被代理对象
     private T target;
 
     public LogHandler(T target) {

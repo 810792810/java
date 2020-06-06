@@ -177,6 +177,30 @@ public class ReflectTest {
     }
 
     @Test
+    public void testConstructor() throws Exception{
+        Class clazz = ClassDemo.class;
+
+        //获取所有共有构造器
+        Constructor[] constructors = clazz.getConstructors();
+        System.out.println("获取所有共有构造器 " + constructors);
+        //获取所有构造器
+        Constructor[] declaredConstructors = clazz.getDeclaredConstructors();
+        System.out.println("获取所有构造器 " + declaredConstructors);
+
+        //根据参数类型和个数获取构造器  public
+        Constructor constructor = clazz.getConstructor();
+        System.out.println("根据参数类型和个数获取public的构造器  " + constructor);
+
+        //根据参数类型和个数获取构造器
+        Constructor declaredConstructor = clazz.getDeclaredConstructor();
+        System.out.println("根据参数类型和个数获取构造器 " + declaredConstructor);
+
+        //通过构造器创建一个对象
+        Object object = declaredConstructor.newInstance();
+        System.out.println("通过构造器创建一个对象 " + object);
+    }
+
+    @Test
     public void testAnnotation() throws Exception{
         Class clazz = ClassDemo.class;
         Object obj = clazz.newInstance();

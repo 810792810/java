@@ -21,7 +21,7 @@ public class ProxyTest {
     public void testProxy(){
         Job job = new Person("张三");
         InvocationHandler logHandler=new LogHandler<>(job);
-        //参数  代理类加载器,代理类,处理器
+        //参数  代理类加载器,被代理接口,调用处理器
         Job jobProxy = (Job)Proxy.newProxyInstance(Job.class.getClassLoader(),new Class<?>[]{Job.class},logHandler);
         jobProxy.work();
     }
