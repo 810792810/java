@@ -73,7 +73,7 @@ public class ThreadPoolExecutorDemo {
         threadPoolExecutor.shutdown();
     }
 
-
+    //修改线程池的属性,以及获取一些属性和状态信息.
      @Test
      void configDemo() {
         BlockingQueue<Runnable> blockingQueue = new ArrayBlockingQueue<>(100);
@@ -97,7 +97,19 @@ public class ThreadPoolExecutorDemo {
                         e.printStackTrace();
                     }
                 }
-                System.out.println(Thread.currentThread().getName() + " "+index);
+                System.out.println(Thread.currentThread().getName() + " "+index  + " ;"+
+                        " 当前队列数 " + threadPoolExecutor.getQueue().size() +
+                        " 活线程总数 " + threadPoolExecutor.getActiveCount() +
+                        " 当前最大线程数 " + threadPoolExecutor.getLargestPoolSize() +
+                        " 当前线程池大小 " + threadPoolExecutor.getPoolSize() +
+                        " 已完成任务数量 " + threadPoolExecutor.getCompletedTaskCount() +
+                        " 核心线程数 " + threadPoolExecutor.getCorePoolSize() +
+                        " 设置的最大线程数 " + threadPoolExecutor.getMaximumPoolSize() +
+                        " 任务数 " + threadPoolExecutor.getTaskCount() +
+                        " 非核心线程空闲存活时间 " + threadPoolExecutor.getKeepAliveTime(TimeUnit.SECONDS) +
+                        " 饱和策略 " + threadPoolExecutor.getRejectedExecutionHandler() +
+                        " 线程工厂 " + threadPoolExecutor.getThreadFactory()
+                );
             });
 
             //可以动态修改线程池的参数 核心线程数,最大线程数,非核心线程的空闲存活时间,饱和策略,线程工厂
@@ -107,17 +119,17 @@ public class ThreadPoolExecutorDemo {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println("获取队列 " + threadPoolExecutor.getQueue());
-                System.out.println("获取活线程总数 " + threadPoolExecutor.getActiveCount());
-                System.out.println("已完成任务数量 " + threadPoolExecutor.getCompletedTaskCount());
-                System.out.println("获取核心线程数 " + threadPoolExecutor.getCorePoolSize());
-                System.out.println("获取最大的线程数 " + threadPoolExecutor.getLargestPoolSize());
-                System.out.println("获取最大线程数 " + threadPoolExecutor.getMaximumPoolSize());
-                System.out.println("获取当前线程池大小 " + threadPoolExecutor.getPoolSize());
-                System.out.println("获取任务数 " + threadPoolExecutor.getTaskCount());
-                System.out.println("获取非核心线程空闲存活时间 " + threadPoolExecutor.getKeepAliveTime(TimeUnit.SECONDS));
-                System.out.println("获取饱和策略 " + threadPoolExecutor.getRejectedExecutionHandler());
-                System.out.println("获取线程工厂 " + threadPoolExecutor.getThreadFactory());
+//                System.out.println("获取队列 " + threadPoolExecutor.getQueue());
+//                System.out.println("获取活线程总数 " + threadPoolExecutor.getActiveCount());
+//                System.out.println("已完成任务数量 " + threadPoolExecutor.getCompletedTaskCount());
+//                System.out.println("获取核心线程数 " + threadPoolExecutor.getCorePoolSize());
+//                System.out.println("获取最大的线程数 " + threadPoolExecutor.getLargestPoolSize());
+//                System.out.println("获取最大线程数 " + threadPoolExecutor.getMaximumPoolSize());
+//                System.out.println("获取当前线程池大小 " + threadPoolExecutor.getPoolSize());
+//                System.out.println("获取任务数 " + threadPoolExecutor.getTaskCount());
+//                System.out.println("获取非核心线程空闲存活时间 " + threadPoolExecutor.getKeepAliveTime(TimeUnit.SECONDS));
+//                System.out.println("获取饱和策略 " + threadPoolExecutor.getRejectedExecutionHandler());
+//                System.out.println("获取线程工厂 " + threadPoolExecutor.getThreadFactory());
 
                 //移除任务
                 Runnable peek = threadPoolExecutor.getQueue().peek();
@@ -125,6 +137,7 @@ public class ThreadPoolExecutorDemo {
                     System.out.println("移除一个任务" + peek );
                     peek.run();
                 }
+                threadPoolExecutor.setKeepAliveTime(5,TimeUnit.SECONDS);
                 //设置工厂线程
                 threadPoolExecutor.setThreadFactory(new MyThreadFactory());
                 //设置饱和策略
