@@ -27,7 +27,9 @@ public class ThreadPoolExecutorDemo {
         //提交任务执行
         for (int i = 0; i <100 ; i++) {
             final int index = i ;
-            threadPoolExecutor.execute(()-> System.out.println(index));
+            threadPoolExecutor.execute(()-> {
+                System.out.println(Thread.currentThread().getName() + " "+index);
+            });
         }
         //关闭线程池 (不然不会停)
         threadPoolExecutor.shutdown();
@@ -69,6 +71,85 @@ public class ThreadPoolExecutorDemo {
 
         //关闭线程池 (不然不会停)
         threadPoolExecutor.shutdown();
+    }
+
+
+     @Test
+     void configDemo() {
+        BlockingQueue<Runnable> blockingQueue = new ArrayBlockingQueue<>(100);
+        //创建一个核心线程数是2,最大线程数5,空闲存活时间3秒,阻塞队列大小10,线程工厂(采用默认的一个 设置方法名),淘汰策略:直接抛出异常，这是默认策略；
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(2,
+                5,
+                1L,
+                TimeUnit.SECONDS,
+                blockingQueue,
+                Executors.defaultThreadFactory(),
+                new ThreadPoolExecutor.AbortPolicy());
+
+        //提交任务执行
+        for (int i = 0; i <100 ; i++) {
+            final int index = i ;
+            threadPoolExecutor.execute(()-> {
+                if (index >3 ){
+                    try {
+                        Thread.sleep(10L);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                System.out.println(Thread.currentThread().getName() + " "+index);
+            });
+
+            //可以动态修改线程池的参数 核心线程数,最大线程数,非核心线程的空闲存活时间,饱和策略,线程工厂
+            if(i ==50){
+                try {
+                    Thread.sleep(1L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("获取队列 " + threadPoolExecutor.getQueue());
+                System.out.println("获取活线程总数 " + threadPoolExecutor.getActiveCount());
+                System.out.println("已完成任务数量 " + threadPoolExecutor.getCompletedTaskCount());
+                System.out.println("获取核心线程数 " + threadPoolExecutor.getCorePoolSize());
+                System.out.println("获取最大的线程数 " + threadPoolExecutor.getLargestPoolSize());
+                System.out.println("获取最大线程数 " + threadPoolExecutor.getMaximumPoolSize());
+                System.out.println("获取当前线程池大小 " + threadPoolExecutor.getPoolSize());
+                System.out.println("获取任务数 " + threadPoolExecutor.getTaskCount());
+                System.out.println("获取非核心线程空闲存活时间 " + threadPoolExecutor.getKeepAliveTime(TimeUnit.SECONDS));
+                System.out.println("获取饱和策略 " + threadPoolExecutor.getRejectedExecutionHandler());
+                System.out.println("获取线程工厂 " + threadPoolExecutor.getThreadFactory());
+
+                //移除任务
+                Runnable peek = threadPoolExecutor.getQueue().peek();
+                if (threadPoolExecutor.remove(peek)){
+                    System.out.println("移除一个任务" + peek );
+                    peek.run();
+                }
+                //设置工厂线程
+                threadPoolExecutor.setThreadFactory(new MyThreadFactory());
+                //设置饱和策略
+                threadPoolExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+                //设置核心线程数
+                threadPoolExecutor.setCorePoolSize(3);
+                //设置最大线程数
+                threadPoolExecutor.setMaximumPoolSize(4);
+            }
+        }
+        //关闭线程池
+        threadPoolExecutor.shutdown();
+
+        if (threadPoolExecutor.isShutdown()){
+            System.out.println("线程池处于状态 shutdown ");
+        }
+        if (threadPoolExecutor.isTerminating()){
+            System.out.println("线程池处于状态 terminating ");
+        }
+        for(;;){
+            if (threadPoolExecutor.isTerminated()){
+                System.out.println("线程池处于状态 terminated ");
+                break;
+            }
+        }
     }
 
 }
