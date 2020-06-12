@@ -78,15 +78,23 @@ public class ThreadPoolExecutorDemo {
      void configDemo() {
         BlockingQueue<Runnable> blockingQueue = new ArrayBlockingQueue<>(100);
         //创建一个核心线程数是2,最大线程数5,空闲存活时间3秒,阻塞队列大小10,线程工厂(采用默认的一个 设置方法名),淘汰策略:直接抛出异常，这是默认策略；
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(2,
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(3,
                 5,
                 1L,
                 TimeUnit.SECONDS,
                 blockingQueue,
                 Executors.defaultThreadFactory(),
                 new ThreadPoolExecutor.AbortPolicy());
+        //启动一个核心线程
+         boolean b = threadPoolExecutor.prestartCoreThread();
+         System.out.println("线程池活跃线程数 " + threadPoolExecutor.getActiveCount());
+        //启动所有核心线程
+         int i1 = threadPoolExecutor.prestartAllCoreThreads();
+         System.out.println("prestartAllCoreThreads " + i1);
+         System.out.println("线程池活跃线程数 " + threadPoolExecutor.getActiveCount());
 
-        //提交任务执行
+
+         //提交任务执行
         for (int i = 0; i <100 ; i++) {
             final int index = i ;
             threadPoolExecutor.execute(()-> {
@@ -150,6 +158,9 @@ public class ThreadPoolExecutorDemo {
         }
         //关闭线程池
         threadPoolExecutor.shutdown();
+
+        //立即关闭
+//        threadPoolExecutor.shutdownNow();
 
         if (threadPoolExecutor.isShutdown()){
             System.out.println("线程池处于状态 shutdown ");
