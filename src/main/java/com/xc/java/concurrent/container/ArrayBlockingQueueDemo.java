@@ -1,4 +1,4 @@
-package com.xc.java.concurrent;
+package com.xc.java.concurrent.container;
 
 
 import org.junit.jupiter.api.Test;
@@ -12,6 +12,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * @Author: xc
  * @Date: 2020/6/12
+ * 数组阻塞队列
+ * 内部基于数组实现,一个put索引,一个task索引 ,内部锁可设置公平与非公平
  */
 public class ArrayBlockingQueueDemo {
 
@@ -35,7 +37,7 @@ public class ArrayBlockingQueueDemo {
     void addDemo()  {
         ArrayBlockingQueue<Integer> queue = new ArrayBlockingQueue(3);
 
-        //add 超过队列大小后,抛 IllegalStateException
+        //add -> offer 超过队列大小后,抛 IllegalStateException
         try {
             for (int i = 0; i <10 ; i++) {
                 queue.add(i);
@@ -44,6 +46,9 @@ public class ArrayBlockingQueueDemo {
             e.printStackTrace();
         }
         System.out.println("add" + queue);
+
+//        addAll() -> add
+
     }
 
     //offer(E e) 将指定的元素插入到此队列的尾部（如果立即可行且不会超过该队列的容量），在成功时返回 true，如果此队列已满，则返回 false。
@@ -97,6 +102,8 @@ public class ArrayBlockingQueueDemo {
             System.out.println(queue.peek());
         }
 
+        // element -> peek
+        queue.element();
 
     }
 
@@ -152,14 +159,13 @@ public class ArrayBlockingQueueDemo {
         //清空内部数组   put索引赋值给task索引
         queue.clear();
 
-        //移除此队列中所有可用的元素，并将它们添加到给定 collection 中。
         queue = this.newInstance();
         Collection<Integer> collection = new ArrayList<>();
+        //移除此队列中所有可用的元素，并将它们添加到给定 collection 中。
         queue.drainTo(collection);
         System.out.println("drainTo之后 collection "+ collection);
         System.out.println("drainTo之后 queue "+ queue);
 
-        //addAll  -> add
         queue = this.newInstance();
         queue.drainTo(collection,2);
         System.out.println("drainTo max 2 之后 collection "+ collection);

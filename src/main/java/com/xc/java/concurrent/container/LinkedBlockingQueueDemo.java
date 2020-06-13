@@ -1,4 +1,4 @@
-package com.xc.java.concurrent;
+package com.xc.java.concurrent.container;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * @Author: xc
  * @Date: 2020/6/12
+ * 链表阻塞队列
+ * 内部链表实现,单向,一个head,一个last,内部非公平锁,可指定大小,不指定Integer最大值
  */
 public class LinkedBlockingQueueDemo {
     //3种构造方法
@@ -26,7 +28,6 @@ public class LinkedBlockingQueueDemo {
         collection.add(1);
         //创建一个容量是 Integer.MAX_VALUE 的 LinkedBlockingQueue，最初包含给定 collection 的元素，元素按该 collection 迭代器的遍历顺序添加。
         LinkedBlockingQueue linkedBlockingQueue3 = new LinkedBlockingQueue(collection);
-
     }
 
     //add -> offer   IllegalStateException
@@ -40,11 +41,11 @@ public class LinkedBlockingQueueDemo {
         }catch (IllegalStateException e){
             e.printStackTrace();
         }
-        System.out.println("add" + queue);
+        System.out.println("add " + queue);
     }
 
     //offer(E e) 将指定元素插入到此队列的尾部（如果立即可行且不会超出此队列的容量），在成功时返回 true，如果此队列已满，则返回 false。
-    // 将指定元素插入到此队列的尾部，如有必要，则等待指定的时间以使空间变得可用
+    //offer(E e, long timeout, TimeUnit unit) 将指定元素插入到此队列的尾部，如有必要，则等待指定的时间以使空间变得可用
     @Test
     void offerDemo(){
         LinkedBlockingQueue<Integer> queue = new LinkedBlockingQueue<>(3);
@@ -56,7 +57,7 @@ public class LinkedBlockingQueueDemo {
         System.out.println("offer1 " + queue);
 
         queue.clear();
-        //offer 将指定的元素插入此队列的尾部，如果该队列已满，则在到达指定的等待时间之前等待可用的空间。  可响应中断
+        //将指定元素插入到此队列的尾部，如有必要，则等待指定的时间以使空间变得可用  可响应中断
         for (int i = 0; i <10 ; i++) {
             try {
                 queue.offer(i,1L, TimeUnit.SECONDS);
@@ -71,11 +72,10 @@ public class LinkedBlockingQueueDemo {
 
     }
 
-    //put  将指定的元素插入此队列的尾部，如果该队列已满，则等待可用的空间。 可响应中断
+    //put  将指定元素插入到此队列的尾部，如有必要，则等待空间变得可用。 可响应中断
     @Test
     void putDemo(){
         LinkedBlockingQueue<Integer> queue = this.newInstance();
-        //put  将指定的元素插入此队列的尾部，如果该队列已满，则等待可用的空间。 可响应中断
         for (int i = 0; i < 5 ; i++) {
             try {
                 //队列满会阻塞
@@ -86,7 +86,7 @@ public class LinkedBlockingQueueDemo {
         }
     }
 
-    //peek 获取但不移除此队列的头；如果此队列为空，则返回 null
+    //peek 获取但不移除此队列的头；如果此队列为空，则返回 null。
     @Test
     void peekDemo(){
         LinkedBlockingQueue<Integer> queue = this.newInstance();
@@ -98,7 +98,7 @@ public class LinkedBlockingQueueDemo {
     }
 
     //poll() 获取并移除此队列的头，如果此队列为空，则返回 null。
-    //poll(long timeout, TimeUnit unit) 获取并移除此队列的头部，在指定的等待时间前等待可用的元素（如果有必要）。
+    //poll(long timeout, TimeUnit unit)  获取并移除此队列的头部，在指定的等待时间前等待可用的元素（如果有必要）。
     @Test
     void pollDemo(){
         LinkedBlockingQueue<Integer> queue = this.newInstance();
@@ -140,23 +140,22 @@ public class LinkedBlockingQueueDemo {
         //如果此队列包含指定的元素，则返回 true。
         boolean contains = queue.contains(2);
         System.out.println("是否包含2这个元素" + contains );
-        //remove -> poll
+        //remove -> poll 删除一个
         queue.remove();
 
-        //队尾遍历到队头 比对删除
+        //队头开始比对删除一个
         queue.remove(1);
 
         //清空内部数组   put索引赋值给task索引
         queue.clear();
 
-        //移除此队列中所有可用的元素，并将它们添加到给定 collection 中。
         queue = this.newInstance();
         Collection<Integer> collection = new ArrayList<>();
+        //移除此队列中所有可用的元素，并将它们添加到给定 collection 中。
         queue.drainTo(collection);
         System.out.println("drainTo之后 collection "+ collection);
         System.out.println("drainTo之后 queue "+ queue);
 
-        //addAll  -> add
         queue = this.newInstance();
         queue.drainTo(collection,2);
         System.out.println("drainTo max 2之后 collection "+ collection);
