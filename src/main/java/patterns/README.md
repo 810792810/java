@@ -33,3 +33,12 @@
         UserPayService  具体策略类 用户支付算法实现
         VipPayService   具体策略类 vip支付算法实现
         PayServiceFactory   策略模式+工厂模式,实现消除if-else
+
+6.代理模式
+    包 proxy
+    成员
+        Service         抽象服务,定义方法
+        RealService     被代理类
+        ProxyService    代理类
+        
+        
