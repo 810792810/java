@@ -1,6 +1,6 @@
 # java
 1.建造者模式 
-    包 bulider
+    包 builder
     4个成员:
         Builder 抽象建造者
         ConcreteBuilder: 具体建造者
@@ -22,8 +22,8 @@
 4.观察者模式
     包 observer
     成员
-        Obsercer 抽象观察者
-        SMSObsercer 短信观察者
+        Observer 抽象观察者
+        SMSObserver 短信观察者
         MailObserver 邮件观察者
         Subject 主题
 5.策略模式
@@ -41,4 +41,11 @@
         RealService     被代理类
         ProxyService    代理类
         
+7.责任链模式
+    包 handler
+    成员
+        Handler         抽象处理类
+        BossHandler     boss处理类
+        HrHandler       hr处理类
+        LeaderHandler   leader处理类
         

@@ -1,4 +1,4 @@
-package patterns.bulider;
+package patterns.builder;
 
 /**
  * 产品
