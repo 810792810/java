@@ -1,4 +1,6 @@
-package leetcode.no1_100;
+package leetcode.jzoffer;
+
+import leetcode.model.TreeNode;
 
 /**
  * @Author: xc
@@ -7,8 +9,7 @@ package leetcode.no1_100;
  *
  * 思路: 后序遍历或层序遍历
  */
-public class No55 {
-
+public class No55_1 {
     public static void main(String[] args) {
         TreeNode treeNode = new TreeNode(1,
                 new TreeNode(2,
@@ -26,22 +27,4 @@ public class No55 {
         }
         return Math.max(maxDepth(root.left), maxDepth(root.right))+1;
     }
-
-
-    public static class  TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-        TreeNode() {}
-        TreeNode(int val) { this.val = val; }
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
-    }
 }
-
-
-
-

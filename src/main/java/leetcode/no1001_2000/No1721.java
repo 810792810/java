@@ -1,5 +1,8 @@
 package leetcode.no1001_2000;
 
+
+import leetcode.model.ListNode;
+
 /**
  * 中等 - 交换链表中的节点
  * 给你链表的头节点 head 和一个整数 k 。
@@ -70,19 +73,4 @@ public class No1721 {
         return head;
     }
 
-
-        static public class ListNode {
-      int val;
-      ListNode next;
-      ListNode() {}
-      ListNode(int val) { this.val = val; }
-      ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-      void print(){
-          ListNode node = this;
-          while(node != null){
-              System.out.print(node.val +", ");
-              node = node.next;
-          }
-      }
-    }
 }
